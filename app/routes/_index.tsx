@@ -1,38 +1,46 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import { Link } from '@remix-run/react';
+import Container from '~/components/Container';
 
-export const meta: V2_MetaFunction = () => {
-  return [{ title: "New Remix App" }];
-};
-
-export default function Index() {
+export default function IndexRoute() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
+    <div className=" bg-purple-radial min-h-screen">
+      <Container
+        className="
+          min-h-screen
+          flex
+          flex-col
+          justify-center
+          items-center
+        "
+      >
+        <div className="flex flex-col justify-center items-center py-12">
+          <h1
+            className="
+              font-display
+              text-center
+              text-4xl
+              sm:text-5xl
+              lg:text-6xl
+              leading-[0.5]
+              text-shadow-hero
+            "
           >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+            Remix
+            <span className="block text-7xl sm:text-8xl lg:text-9xl uppercase">
+              J🤪kes!
+            </span>
+          </h1>
+          <nav>
+            <ul className="flex gap-4 sm:gap-6 font-display text-lg md:text-xl leading-none">
+              <li>
+                <Link to="jokes" className="hover:decoration-wavy">
+                  Read Jokes
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </Container>
     </div>
   );
 }

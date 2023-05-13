@@ -1,17 +1,9 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import type { LinksFunction } from '@remix-run/node';
+import { Links, LiveReload, Outlet } from '@remix-run/react';
 
-export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+import styles from './styles/tailwind.css';
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 export default function App() {
   return (
@@ -19,13 +11,11 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <Meta />
+        <title>Remix: So great, it's funny!</title>
         <Links />
       </head>
-      <body>
+      <body className="bg-default text-default min-h-screen">
         <Outlet />
-        <ScrollRestoration />
-        <Scripts />
         <LiveReload />
       </body>
     </html>

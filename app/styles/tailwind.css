@@ -1,0 +1,132 @@
+@import './font.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  a {
+    @apply text-link hover:text-link-hover no-underline hover:underline;
+  }
+
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'],
+  .as-button {
+    @apply appearance-none
+      cursor-pointer
+      inline-flex
+      items-center
+      justify-center
+      bg-link
+      text-background
+      font-display
+      font-bold
+      text-lg
+      leading-none
+      m-0
+      px-4
+      py-3
+      border-0
+      rounded
+      shadow-button
+      shadow-link-dark
+      outline-offset-2
+      transition
+      hover:text-background
+      hover:no-underline
+      hover:shadow-button-hover
+      hover:-translate-y-px
+      active:bg-link-hover
+      active:shadow-button-pressed
+      active:translate-y-px
+      disabled:translate-y-0
+      disabled:pointer-events-none
+      disabled:opacity-70;
+  }
+
+  [type='text'],
+  [type='password'],
+  [type='date'],
+  [type='datetime'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='week'],
+  [type='email'],
+  [type='number'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='url'],
+  [type='color'],
+  textarea {
+    @apply appearance-none
+    flex
+    items-center
+    w-full
+    h-10
+    m-0
+    px-3
+    py-2
+    border
+    border-default
+    rounded
+    bg-white
+    bg-opacity-10
+    bg-blend-luminosity
+    shadow-none
+    font-sans
+    text-base
+    text-default
+    transition
+    invalid:border-invalid
+    aria-[invalid="true"]:border-invalid
+    disabled:opacity-70
+    disabled:cursor-not-allowed
+    read-only:opacity-70
+    read-only:cursor-not-allowed
+    focus-visible:outline-none
+    focus-visible:bg-opacity-30;
+  }
+
+  textarea {
+    @apply block min-h-[50px] max-w-full;
+  }
+
+  textarea[rows] {
+    @apply h-auto;
+  }
+
+  [type='file'],
+  [type='checkbox'],
+  [type='radio'] {
+    @apply m-0;
+  }
+
+  [type='file'] {
+    @apply w-full;
+  }
+
+  label {
+    @apply m-0;
+  }
+
+  [type='checkbox'] + label,
+  [type='radio'] + label {
+    @apply ml-2;
+  }
+
+  label > [type='checkbox'],
+  label > [type='radio'] {
+    @apply mr-2;
+  }
+
+  .text-shadow-hero {
+    text-shadow: 0 3px 0 rgba(0, 0, 0, 0.75);
+  }
+
+  .text-shadow-hero span {
+    text-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.5), 0 5px 0 rgba(0, 0, 0, 0.75);
+  }
+}
