@@ -1,10 +1,14 @@
+import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import Container from '~/components/Container';
 import { db } from '~/utils/db.server';
+import { getUser } from '~/utils/session.server';
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderArgs) => {
+  const user = await getUser(request);
   return json({
+    user,
     jokes: await db.joke.findMany({
       select: { id: true, name: true },
       orderBy: { createdAt: 'desc' },
@@ -14,24 +18,42 @@ export const loader = async () => {
 };
 
 export default function JokesRoute() {
-  const { jokes } = useLoaderData<typeof loader>();
+  const { user, jokes } = useLoaderData<typeof loader>();
 
   return (
     <div className="flex flex-col min-h-full">
       <header className="py-4 border-b border-b-default">
         <Container className="flex justify-between items-center">
           <h1 className="font-display text-4xl">
-            <Link to="/" title="Remix Jokes" aria-label="Remix Jokes">
+            <Link
+              to="/"
+              title="Remix Jokes"
+              aria-label="Remix Jokes"
+              className="text-white hover:no-underline hover:text-white"
+            >
               <span className="sm:hidden">🤪</span>
               <span className="hidden sm:block">J🤪KES</span>
             </Link>
           </h1>
+
+          {user ? (
+            <div className="flex flex-row items-center gap-4">
+              <span>Hi {user.username}!</span>
+              <form method="post" action="/logout">
+                <button type="submit">Log out</button>
+              </form>
+            </div>
+          ) : (
+            <Link to="/login" className="button">
+              Log in
+            </Link>
+          )}
         </Container>
       </header>
 
       <main className="py-8 sm:py-12 flex-full">
         <Container className="flex flex-col sm:flex-row gap-4">
-          <div className="max-w-2xs flex flex-col gap-3">
+          <div className="w-48 flex-shrink-0 flex flex-col gap-3">
             <Link to=".">Get a random joke</Link>
 
             <p>Here are a few more jokes to check out:</p>

@@ -29,6 +29,12 @@ export default {
       borderColor: {
         default: 'hsl(277, 85%, 38%)',
       },
+      outlineColor: {
+        default: 'hsl(277, 85%, 38%)',
+      },
+      accentColor: {
+        default: 'hsl(277, 85%, 38%)',
+      },
       boxShadow: {
         button: '0 3px 0 0 var(--tw-shadow-color)',
         'button-hover': '0 4px 0 0 var(--tw-shadow-color)',

@@ -1,9 +1,18 @@
-import type { ActionArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useActionData } from '@remix-run/react';
+import {
+  Link,
+  isRouteErrorResponse,
+  useActionData,
+  useRouteError,
+} from '@remix-run/react';
+import ErrorMessage from '~/components/ErrorMessage';
 
+import FormValidationError from '~/components/FormValidationError';
 import { db } from '~/utils/db.server';
-import { badRequest } from '~/utils/request.server';
+import { badRequest, unauthorized } from '~/utils/request.server';
+import { getUserId, requireUserId } from '~/utils/session.server';
 
 const validateJokeName = (name: string) => {
   if (name.length < 3) return "The joke's name is too short";
@@ -17,7 +26,16 @@ const validateJokeContent = (content: string) => {
   return null;
 };
 
+export const loader = async ({ request }: LoaderArgs) => {
+  const userId = await getUserId(request);
+  if (!userId)
+    throw unauthorized({ error: 'You must be logged in to create a joke.' });
+
+  return json({});
+};
+
 export const action = async ({ request }: ActionArgs) => {
+  const userId = await requireUserId(request);
   const form = await request.formData();
 
   const name = form.get('name');
@@ -45,25 +63,11 @@ export const action = async ({ request }: ActionArgs) => {
       formError: null,
     });
 
-  const joke = await db.joke.create({ data: fields });
+  const joke = await db.joke.create({
+    data: { ...fields, jokesterId: userId },
+  });
   return redirect(`/jokes/${joke.id}`);
 };
-
-function FormValidationError({
-  error,
-  id,
-}: {
-  error?: string | null;
-  id?: string;
-}) {
-  if (!error) return null;
-
-  return (
-    <p className="text-invalid" id={id} role="alert">
-      {error}
-    </p>
-  );
-}
 
 export default function JokesNewRoute() {
   const actionData = useActionData<typeof action>();
@@ -119,4 +123,23 @@ export default function JokesNewRoute() {
       </form>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error) && error.status === 401) {
+    return (
+      <div>
+        <h2 className="font-display text-4xl">Sign in to continue</h2>
+        <p className="mt-2 mb-4">You must be logged in to add new jokes.</p>
+
+        <Link to="/login?redirectTo=/jokes/new" className="as-button">
+          Log in
+        </Link>
+      </div>
+    );
+  }
+
+  return <ErrorMessage error={error} />;
 }

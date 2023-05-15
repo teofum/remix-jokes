@@ -3,7 +3,7 @@ import Container from '~/components/Container';
 
 export default function IndexRoute() {
   return (
-    <div className=" bg-purple-radial min-h-screen">
+    <div className="bg-purple-radial min-h-screen">
       <Container
         className="
           min-h-screen

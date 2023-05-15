@@ -82,12 +82,14 @@
     transition
     invalid:border-invalid
     aria-[invalid="true"]:border-invalid
+    outline-1
+    outline-default
     disabled:opacity-70
     disabled:cursor-not-allowed
     read-only:opacity-70
     read-only:cursor-not-allowed
-    focus-visible:outline-none
-    focus-visible:bg-opacity-30;
+    focus-visible:outline
+    focus-visible:bg-opacity-20;
   }
 
   textarea {
@@ -109,7 +111,7 @@
   }
 
   label {
-    @apply m-0;
+    @apply m-0 relative;
   }
 
   [type='checkbox'] + label,
@@ -120,6 +122,10 @@
   label > [type='checkbox'],
   label > [type='radio'] {
     @apply mr-2;
+  }
+
+  [type='radio'] {
+    @apply accent-default;
   }
 
   .text-shadow-hero {
