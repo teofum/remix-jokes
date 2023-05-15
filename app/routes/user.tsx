@@ -1,6 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link, Outlet, useLoaderData } from '@remix-run/react';
+import { Form, Link, Outlet, useLoaderData } from '@remix-run/react';
 import Container from '~/components/Container';
 import { getUser } from '~/utils/session.server';
 
@@ -31,9 +31,9 @@ export default function UsersRoute() {
           {user ? (
             <div className="flex flex-row items-center gap-4">
               <span>Hi {user.username}!</span>
-              <form method="post" action="/logout">
+              <Form method="post" action="/logout">
                 <button type="submit">Log out</button>
-              </form>
+              </Form>
             </div>
           ) : (
             <Link to="/login" className="button">

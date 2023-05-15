@@ -1,6 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link, Outlet, useLoaderData } from '@remix-run/react';
+import { Form, Link, Outlet, useLoaderData } from '@remix-run/react';
 import Container from '~/components/Container';
 import { db } from '~/utils/db.server';
 import { getUser } from '~/utils/session.server';
@@ -39,9 +39,9 @@ export default function JokesRoute() {
           {user ? (
             <div className="flex flex-row items-center gap-4">
               <span>Hi {user.username}!</span>
-              <form method="post" action="/logout">
+              <Form method="post" action="/logout">
                 <button type="submit">Log out</button>
-              </form>
+              </Form>
             </div>
           ) : (
             <Link to="/login" className="button">
@@ -61,7 +61,7 @@ export default function JokesRoute() {
             <ul>
               {jokes.map((joke) => (
                 <li key={joke.id} className="list-disc list-inside">
-                  <Link to={joke.id}>{joke.name}</Link>
+                  <Link prefetch="intent" to={joke.id}>{joke.name}</Link>
                 </li>
               ))}
             </ul>

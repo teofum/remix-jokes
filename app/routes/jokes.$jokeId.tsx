@@ -1,11 +1,26 @@
-import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link, useLoaderData, useRouteError } from '@remix-run/react';
+import { Form, Link, useLoaderData, useRouteError } from '@remix-run/react';
 import ErrorMessage from '~/components/ErrorMessage';
 import { db } from '~/utils/db.server';
 import { badRequest, forbidden, notFound } from '~/utils/request.server';
 import { getUser, requireUserId } from '~/utils/session.server';
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  const { description, title } = data
+    ? {
+        description: `Enjoy the "${data.joke.name}" joke and much more`,
+        title: `"${data.joke.name}" joke`,
+      }
+    : { description: 'No joke found', title: 'This is no joke' };
+
+  return [
+    { name: 'description', content: description },
+    { name: 'twitter:description', content: description },
+    { title },
+  ];
+};
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getUser(request);
@@ -56,11 +71,11 @@ export default function JokeRoute() {
         <h1 className="font-display text-4xl text-link">{joke.name}</h1>
 
         {loggedUserIsOwner && (
-          <form className="ml-auto" method="post">
+          <Form className="ml-auto" method="post">
             <button name="intent" type="submit" value="delete">
               Delete
             </button>
-          </form>
+          </Form>
         )}
       </div>
       <p className="mt-2 mb-4">{joke.content}</p>

@@ -2,6 +2,7 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import {
+  Form,
   Link,
   isRouteErrorResponse,
   useActionData,
@@ -75,7 +76,7 @@ export default function JokesNewRoute() {
   return (
     <div>
       <p>Add your own hilarious joke</p>
-      <form method="post" className="flex flex-col gap-4 w-full">
+      <Form method="post" className="flex flex-col gap-4 w-full">
         <div>
           <label>
             Name:{' '}
@@ -120,7 +121,7 @@ export default function JokesNewRoute() {
           <FormValidationError error={actionData?.formError} />
           <button type="submit">Add</button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }

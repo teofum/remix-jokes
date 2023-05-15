@@ -1,4 +1,4 @@
-import type { ActionArgs } from '@remix-run/node';
+import type { ActionArgs, V2_MetaFunction } from '@remix-run/node';
 import { Link, useActionData, useSearchParams } from '@remix-run/react';
 
 import Container from '~/components/Container';
@@ -6,6 +6,17 @@ import FormValidationError from '~/components/FormValidationError';
 import { db } from '~/utils/db.server';
 import { badRequest, serverError, unauthorized } from '~/utils/request.server';
 import { createUserSession, login, register } from '~/utils/session.server';
+
+export const meta: V2_MetaFunction = () => {
+  const description =
+    "Login to submit your own jokes to Remix Jokes!";
+
+  return [
+    { name: "description", content: description },
+    { name: "twitter:description", content: description },
+    { title: "Remix Jokes | Login" },
+  ];
+};
 
 const validateUsername = (username: string) => {
   if (username.length < 3)
