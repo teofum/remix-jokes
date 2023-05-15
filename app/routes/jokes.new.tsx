@@ -6,14 +6,17 @@ import {
   Link,
   isRouteErrorResponse,
   useActionData,
+  useLoaderData,
+  useNavigation,
   useRouteError,
 } from '@remix-run/react';
 import ErrorMessage from '~/components/ErrorMessage';
 
 import FormValidationError from '~/components/FormValidationError';
+import Joke from '~/components/Joke';
 import { db } from '~/utils/db.server';
 import { badRequest, unauthorized } from '~/utils/request.server';
-import { getUserId, requireUserId } from '~/utils/session.server';
+import { getUser, requireUserId } from '~/utils/session.server';
 
 const validateJokeName = (name: string) => {
   if (name.length < 3) return "The joke's name is too short";
@@ -28,11 +31,11 @@ const validateJokeContent = (content: string) => {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const userId = await getUserId(request);
-  if (!userId)
+  const user = await getUser(request);
+  if (!user)
     throw unauthorized({ error: 'You must be logged in to create a joke.' });
 
-  return json({});
+  return json({ user });
 };
 
 export const action = async ({ request }: ActionArgs) => {
@@ -71,7 +74,27 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export default function JokesNewRoute() {
+  const { user } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+
+  if (navigation.formData) {
+    const content = navigation.formData.get('content');
+    const name = navigation.formData.get('name');
+    if (
+      typeof content === 'string' &&
+      typeof name === 'string' &&
+      !validateJokeContent(content) &&
+      !validateJokeName(name)
+    )
+      return (
+        <Joke
+          joke={{ name, content, jokester: user }}
+          loggedUserIsOwner={true}
+          canDelete={false}
+        />
+      );
+  }
 
   return (
     <div>
