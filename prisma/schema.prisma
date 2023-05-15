@@ -16,13 +16,13 @@ model User {
   updatedAt     DateTime  @updatedAt
   username      String    @unique
   passwordHash  String
-  jokes         Joke[]
+  jokes         Joke[]    @relation("Jokes")
 }
 
 model Joke {
   id          String    @id @default(uuid())
   jokesterId  String
-  jokester    User      @relation(fields: [jokesterId], references: [id], onDelete: Cascade)
+  jokester    User      @relation("Jokes", fields: [jokesterId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   name        String

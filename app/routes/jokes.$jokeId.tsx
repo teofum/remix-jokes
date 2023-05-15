@@ -1,7 +1,7 @@
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, useRouteError } from '@remix-run/react';
+import { Link, useLoaderData, useRouteError } from '@remix-run/react';
 import ErrorMessage from '~/components/ErrorMessage';
 import { db } from '~/utils/db.server';
 import { badRequest, forbidden, notFound } from '~/utils/request.server';
@@ -64,7 +64,10 @@ export default function JokeRoute() {
         )}
       </div>
       <p className="mt-2 mb-4">{joke.content}</p>
-      <p>Uploaded by {joke.jokester.username}</p>
+      <p>
+        Uploaded by{' '}
+        <Link to={`/user/${joke.jokester.id}`}>{joke.jokester.username}</Link>
+      </p>
     </div>
   );
 }
